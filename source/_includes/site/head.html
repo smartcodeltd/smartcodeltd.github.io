@@ -26,7 +26,13 @@
     {% if site.social.facebook %}<meta property="og:author" content="https://facebook.com/{{ site.social.facebook }}">{% endif %}
     {% if page.facebook.image %}<meta property="og:image" content="{{ page.facebook.image }}">{% endif %}
     {% endif %}
-    <link href="{{ root_url }}/favicon.png" rel="icon">
+    <link rel="icon" href="{{ root_url }}/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ root_url }}/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="{{ root_url }}/touch-icon-iphone-precomposed.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="{{ root_url }}/touch-icon-ipad-precomposed.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="{{ root_url }}/touch-icon-iphone-retina-precomposed.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="{{ root_url }}/touch-icon-ipad-retina-precomposed.png">
+
     <link href="{{ root_url }}/stylesheets/screen.css" media="screen, projection" rel="stylesheet">
     <link href="{{ root_url }}{{ site.subscribe_rss }}" rel="alternate" title="{{site.title}}" type="application/atom+xml">
   </head>
