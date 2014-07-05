@@ -1,3 +1,8 @@
+# IntelliJ
+.idea
+*.iml
+
+# Octopress
 .bundle
 .DS_Store
 .sass-cache
