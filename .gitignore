@@ -6,6 +6,7 @@
 _deploy
 public
 sass.old
+sass/inuitcss
 source.old
 source/_stash
 source/stylesheets/screen.css
