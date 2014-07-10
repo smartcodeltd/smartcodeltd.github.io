@@ -2,12 +2,12 @@
 #      Main Configs       #
 # ----------------------- #
 
-url: http://smartcodeltd.github.io
-title: smartcode ltd
-subtitle: agile development consultancy
-author: Jan Molak
+url:           http://smartcodeltd.github.io
+title:         smartcode ltd
+subtitle:      Software engineering consultancy for agile teams
+author:        Jan Molak
 simple_search: https://www.google.com/search
-description:
+description:   Software engineering consultancy for agile teams. Get in touch and find out how smartcode can help your organisation develop even more amazing software!
 
 # Default date format is "ordinal" (resulting in "July 22nd 2007")
 # You can customize the format as defined in
@@ -42,6 +42,7 @@ rdiscount:
 highlighter: pygments # default python pygments have been replaced by pygments.rb
 
 paginate: 10          # Posts per page on the blog index
+pagination_dir: blog
 paginate_path: "posts/:num"  # Directory base for pagination URLs eg. /posts/2/
 recent_posts: 5       # Posts in the sidebar Recent Posts section
 excerpt_link: "Read on &rarr;"  # "Continue reading" link text at the bottom of excerpted articles
@@ -64,13 +65,13 @@ default_asides: [asides/recent_posts.html, asides/github.html, asides/delicious.
 # ----------------------- #
 
 # Github repositories
-github_user:
-github_repo_count: 0
+github_user:              jan-molak
+github_repo_count:        2
 github_show_profile_link: true
-github_skip_forks: true
+github_skip_forks:        true
 
 # Twitter
-twitter_user:
+twitter_user: JanMolak
 twitter_tweet_button: true
 
 # Google +1
@@ -91,11 +92,18 @@ delicious_user:
 delicious_count: 3
 
 # Disqus Comments
-disqus_short_name:
+disqus_short_name: smartcodeltd
 disqus_show_comment_count: false
 
 # Google Analytics
-google_analytics_tracking_id:
+google_analytics_tracking_id: UA-24594055-3
 
 # Facebook Like
 facebook_like: false
+
+social:
+  title:         Follow Jan!
+  github:        jan-molak
+  linkedin:      janmolak
+  stackoverflow: 264502
+  twitter:       JanMolak
