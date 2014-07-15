@@ -12,6 +12,6 @@ applications for the modern web.
 If you're looking for multi-skilled agile technology experts to **augment your team**,
 **build a project for you**, **train your staff** or **speak at your conference**, you've come to the right place :)
 
-We're guessing that you'd probably prefer to contact a real person rather
-than use a soulless, box-standard email form, so to get in touch - please email **Jan Molak**, the founder
-of smartcode ltd, at jan.molak@smartcodeltd.co.uk
+My name is [Jan Molak](http://linkedin.com/in/janmolak). I’m an agile software developer, architect and team leader and I founded smartcode ltd to help companies like yours develop and deliver even more amazing software.
+
+Get in touch, email me directly at jan.molak@smartcodeltd.co.uk or [connect on LinkedIn](http://linkedin.com/in/janmolak) to see the recommendations of smartcode's work so far.
