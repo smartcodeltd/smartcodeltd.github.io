@@ -4,13 +4,14 @@ layout: default
 
 {% assign index = true %}
 
-  {% for post in paginator.posts %}
-  {% assign content = post.content %}
-  <article class="listing">
-    {% include blog/post/article.html %}
-  </article>
-  <hr>
-{% endfor %}
+  <!-- for post in paginator.posts -->
+  {% for post in site.posts %}
+    {% assign content = post.content %}
+    <article class="listing">
+      {% include blog/post/article.html %}
+    </article>
+    <hr />
+  {% endfor %}
 
   <div class="pagination">
     {% if paginator.next_page %}

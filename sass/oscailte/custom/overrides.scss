@@ -24,11 +24,11 @@
   color:#fafafa !important;
 
   h1,h2,h3 {
-  text-shadow:
-    -1px -1px 0 #000,
-    1px -1px 0 #000,
-    -1px 1px 0 #000,
-    1px 1px 0 #000 !important;
+    text-shadow:
+      -1px -1px 0 #000,
+      1px -1px 0 #000,
+      -1px 1px 0 #000,
+      1px 1px 0 #000 !important;
   }
   .avatar {
     img {
@@ -47,3 +47,5 @@
   ul { margin-left:20px; padding-right:30px;}
   li { text-align: left; margin-bottom: 5px; }
 }
+
+h1 { font-size:2em; }
