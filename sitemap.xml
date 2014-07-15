@@ -2,26 +2,45 @@
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   
-  
   <url>
-    <loc>http://smartcodeltd.github.io/blog/archives/</loc>
-    <lastmod>2014-07-05T23:20:37+01:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
+    <loc>http://smartcodeltd.github.io/blog/2014/07/10/taking-a-moment-unit-testing-time-sensitive-code/</loc>
+    <lastmod>2014-07-10T21:59:05+01:00</lastmod>
+    <priority>0.8</priority>
   </url>
   
   <url>
+    <loc>http://smartcodeltd.github.io/blog/2014/07/06/objects-under-construction/</loc>
+    <lastmod>2014-07-06T16:10:53+01:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  
+  <url>
     <loc>http://smartcodeltd.github.io/blog/</loc>
-    <lastmod>2014-07-05T23:20:37+01:00</lastmod>
+    <lastmod>2014-07-15T20:00:18+01:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>http://smartcodeltd.github.io/</loc>
-    <lastmod>2014-07-05T23:20:37+01:00</lastmod>
+    <lastmod>2014-07-15T20:00:18+01:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
+  </url>
+  
+  <url>
+    <loc>http://smartcodeltd.github.io/blog/archives/</loc>
+    <lastmod>2014-07-15T20:00:18+01:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <url>
+    <loc>http://smartcodeltd.github.io/contact/</loc>
+    <lastmod>2014-07-15T20:00:18+01:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
   </url>
   
   

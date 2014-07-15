@@ -9,13 +9,13 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Blog index - smartcode ltd</title>
+    <title>Objects under construction - smartcode ltd</title>
     <meta name="author" content="Jan Molak">
     
     <meta name="description" content="Software engineering consultancy for agile teams. Get in touch and find out how smartcode can help your organisation develop even more amazing &hellip;">
     
     <meta name="viewport" content="width=device-width">
-    <link rel="canonical" href="http://smartcodeltd.github.io/blog/archives">
+    <link rel="canonical" href="http://smartcodeltd.github.io/blog/2014/07/06/objects-under-construction">
     
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
@@ -63,76 +63,28 @@
         <div class="grid__item two-thirds lap-one-whole palm-one-whole">
         
 
-          
-<h1 class="title indent">
-  Blog Index
-</h1>
-<hr class="divider">
+          <article class="post">
+  <header>
+  
+  <h1 class="title indent">Objects under construction</h1>
+  
 
-
-<div id="archive-list">
   
-  
-  
+  <div class="meta clearfix">
     
-    <h2>2014</h2>
+
+
+
+
+
+
+
+
   
-    <article>
-      
 
-<div class="grid">
 
-  <div class="grid__item one-fifth palm-one-whole">
-    <time datetime="2014-07-10T21:59:05+01:00" pubdate>
-      <span class='month'>Jul</span> <span class='day'>10</span>
-    </time>
-  </div>
-  <div class="grid__item four-fifths palm-one-whole">
-    <h1 class="gamma"><a href="/blog/2014/07/10/taking-a-moment-unit-testing-time-sensitive-code/">Taking a Moment - Unit Testing Time-Sensitive Code</a></h1>
+<time class="pull-left" datetime="2014-07-06T16:10:53+01:00" pubdate data-updated="true"><i class="icon-calendar"></i> Jul 6<sup>th</sup>, 2014</time>
     
-    <footer class="meta">
-      
-
-  <div>
-    <i class="icon-tags"></i>
-    <ul class="tags unstyled">
-    
-      
-        <li><a class='category' href='/blog/categories/extreme-javascript/'>extreme javascript</a></li>
-      
-        <li><a class='category' href='/blog/categories/moment/'>moment</a></li>
-      
-        <li><a class='category' href='/blog/categories/tdd/'>tdd</a></li>
-      
-    
-    </ul>
-  </div>
-
-    </footer>
-    
-    <hr class="divider">
-  </div>
-
-</div>
-    </article>
-  
-  
-  
-    <article>
-      
-
-<div class="grid">
-
-  <div class="grid__item one-fifth palm-one-whole">
-    <time datetime="2014-07-06T16:10:53+01:00" pubdate>
-      <span class='month'>Jul</span> <span class='day'>06</span>
-    </time>
-  </div>
-  <div class="grid__item four-fifths palm-one-whole">
-    <h1 class="gamma"><a href="/blog/2014/07/06/objects-under-construction/">Objects under construction</a></h1>
-    
-    <footer class="meta">
-      
 
   <div>
     <i class="icon-tags"></i>
@@ -151,16 +103,66 @@
     </ul>
   </div>
 
-    </footer>
     
-    <hr class="divider">
   </div>
-
-</div>
-    </article>
   
-</div>
+</header>
 
+
+
+
+  <p><a href="http://puttingtheteaintoteam.blogspot.co.uk/2008/10/is-that-pojo-or-nojo.html">http://puttingtheteaintoteam.blogspot.co.uk/2008/10/is-that-pojo-or-nojo.html</a>
+An &ldquo;object&rdquo; (in object-oriented programming) has identity, state and behaviour. A NOJO has identity and state. A function has behaviour but not state. An object has identity, state and behaviour.</p>
+
+<p><a href="http://addyosmani.com/resources/essentialjsdesignpatterns/book/#constructorpatternjavascript">http://addyosmani.com/resources/essentialjsdesignpatterns/book/#constructorpatternjavascript</a></p>
+
+<h1>Privacy</h1>
+
+<p>The Module pattern encapsulates &ldquo;privacy&rdquo;, state and organization using closures. It provides a way of wrapping a mix of public and private methods and variables, protecting pieces from leaking into the global scope and accidentally colliding with another developer&rsquo;s interface. With this pattern, only a public API is returned, keeping everything else within the closure private.
+This gives us a clean solution for shielding logic doing the heavy lifting whilst only exposing an interface we wish other parts of our application to use. The pattern is quite similar to an immediately-invoked functional expression (IIFE &ndash; see the section on namespacing patterns for more on this) except that an object is returned rather than a function.
+It should be noted that there isn&rsquo;t really an explicitly true sense of &ldquo;privacy&rdquo; inside JavaScript because unlike some traditional languages, it doesn&rsquo;t have access modifiers. Variables can&rsquo;t technically be declared as being public nor private and so we use function scope to simulate this concept. Within the Module pattern, variables or methods declared are only available inside the module itself thanks to closure. Variables or methods defined within the returning object however are available to everyone.</p>
+
+<h1>Module pattern</h1>
+
+<p>Advantages</p>
+
+<p>We&rsquo;ve seen why the Constructor pattern can be useful, but why is the Module pattern a good choice? For starters, it&rsquo;s a lot cleaner for developers coming from an object-oriented background than the idea of true encapsulation, at least from a JavaScript perspective.</p>
+
+<p>Secondly, it supports private data &ndash; so, in the Module pattern, public parts of our code are able to touch the private parts, however the outside world is unable to touch the class&rsquo;s private parts (no laughing! Oh, and thanks to David Engfer for the joke).</p>
+
+<p>Disadvantages</p>
+
+<p>The disadvantages of the Module pattern are that as we access both public and private members differently, when we wish to change visibility, we actually have to make changes to each place the member was used.</p>
+
+<p>We also can&rsquo;t access private members in methods that are added to the object at a later point. That said, in many cases the Module pattern is still quite useful and when used correctly, certainly has the potential to improve the structure of our application.</p>
+
+<p>Other disadvantages include the inability to create automated unit tests for private members and additional complexity when bugs require hot fixes. It&rsquo;s simply not possible to patch privates. Instead, one must override all public methods which interact with the buggy privates. Developers can&rsquo;t easily extend privates either, so it&rsquo;s worth remembering privates are not as flexible as they may initially appear.</p>
+
+<h1>Revealing Module Pattern</h1>
+
+<p> Christian Heilmann’s</p>
+
+<p> Advantages</p>
+
+<p> This pattern allows the syntax of our scripts to be more consistent. It also makes it more clear at the end of the module which of our functions and variables may be accessed publicly which eases readability.</p>
+
+<p> Disadvantages</p>
+
+<p> A disadvantage of this pattern is that if a private function refers to a public function, that public function can&rsquo;t be overridden if a patch is necessary. This is because the private function will continue to refer to the private implementation and the pattern doesn&rsquo;t apply to public members, only to functions.</p>
+
+<p> Public object members which refer to private variables are also subject to the no-patch rule notes above.</p>
+
+<p> As a result of this, modules created with the Revealing Module pattern may be more fragile than those created with the original Module pattern, so care should be taken during usage.</p>
+
+
+</article>
+
+ 
+<section id="disqus">
+  <h1 class="indent title">Comments</h1>
+  <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
 
 
         </div>
@@ -267,7 +269,10 @@
   var disqus_shortname = 'smartcodeltd';
   
     
-    var disqus_script = 'count.js';
+    // var disqus_developer = 1;
+    var disqus_identifier = 'http://smartcodeltd.github.io/blog/2014/07/06/objects-under-construction/';
+    var disqus_url = 'http://smartcodeltd.github.io/blog/2014/07/06/objects-under-construction/';
+    var disqus_script = 'embed.js';
   
   (function () {
     var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

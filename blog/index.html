@@ -12,7 +12,7 @@
     <title>smartcode ltd</title>
     <meta name="author" content="Jan Molak">
     
-    <meta name="description" content=" ">
+    <meta name="description" content="Software engineering consultancy for agile teams. Get in touch and find out how smartcode can help your organisation develop even more amazing &hellip;">
     
     <meta name="viewport" content="width=device-width">
     <link rel="canonical" href="http://smartcodeltd.github.io/blog">
@@ -45,7 +45,8 @@
 <label for="toggle" class="toggle" data-open="Main Menu" data-close="Close Menu"></label>
 <ul class="menu pull-right">
   <li><a href="/">Home</a></li>
-  <li><a href="/blog/">Blog</a></li>
+  <li><a href="/contact/">Get in touch!</a></li>
+  <!--<li><a href="/blog/">Blog</a></li>-->
 </ul>
   </nav>
 </div>
@@ -81,18 +82,18 @@
   
 <section class="social aside-module grid__item one-whole lap-one-half">
   <h1 class="title delta">
-    Follow me!
+    Follow Jan!
   </h1>
   <ul class="unstyled">
     
     
+    <li><a class="github" href="//github.com/jan-molak"><i class="icon-github"></i> Github</a></li>
     
     
+    <li><a class="linkedin" href="//linkedin.com/in/janmolak"><i class="icon-linkedin-sign"></i> LinkedIn</a></li>
     
-    
-    
-    
-    
+    <li><a class="stackoverflow" href="//stackoverflow.com/users/264502"><i class="icon-stackexchange"></i> StackOverflow</a></li>
+    <li><a class="twitter" href="//twitter.com/JanMolak"><i class="icon-twitter"></i> Twitter</a></li>
     
   </ul>
 </section>
@@ -102,6 +103,32 @@
   <h1 class="title delta">Recent Posts</h1>
   <ul class="divided">
     
+      <li class="post">
+        <a href="/blog/2014/07/10/taking-a-moment-unit-testing-time-sensitive-code/">Taking a Moment - Unit Testing Time-Sensitive Code</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/07/06/objects-under-construction/">Objects under construction</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section id="github-repos" class="aside-module grid__item one-whole lap-one-half">
+  <h1 class="title delta">
+    GitHub Repos
+    
+    <small class="pull-right">
+      <a class="btn" href="//github.com/jan-molak" title="@jan-molak on GitHub" target="_blank">
+        <i class="icon-external-link"></i>
+      </a>
+    </small>
+    
+  </h1>
+  <ul id="gh_repos" class="divided">
+    <li class="loading">
+      <i class="icon-spinner icon-spin"></i>
+    </li>
   </ul>
 </section>
 
@@ -137,10 +164,50 @@
 <script defer src="/javascripts/octopress.js"></script>
 
 
+<script>
+  var _gaq=[['_setAccount','UA-24594055-3'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+
+
+<script>
+  var disqus_shortname = 'smartcodeltd';
+  
+    
+    var disqus_script = 'count.js';
+  
+  (function () {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  }());
+</script>
 
 
 
 
+<script>
+  $(document).ready(function(){
+    if (!window.jXHR){
+      var jxhr = document.createElement('script');
+      jxhr.type = 'text/javascript';
+      jxhr.src = '/javascripts/libs/jXHR.js';
+      var s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(jxhr, s);
+    }
+
+    github.showRepos({
+      user: 'jan-molak',
+      count: 2,
+      skip_forks: true,
+      target: '#gh_repos'
+    });
+  });
+</script>
+<script src="/javascripts/github.js"></script>
 
 
 

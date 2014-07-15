@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: moment | smartcode ltd]]></title>
+  <link href="http://smartcodeltd.github.io/blog/categories/moment/atom.xml" rel="self"/>
+  <link href="http://smartcodeltd.github.io/"/>
+  <updated>2014-07-15T20:00:18+01:00</updated>
+  <id>http://smartcodeltd.github.io/</id>
+  <author>
+    <name><![CDATA[Jan Molak]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Taking a Moment - Unit Testing Time-Sensitive Code]]></title>
+    <link href="http://smartcodeltd.github.io/blog/2014/07/10/taking-a-moment-unit-testing-time-sensitive-code/"/>
+    <updated>2014-07-10T21:59:05+01:00</updated>
+    <id>http://smartcodeltd.github.io/blog/2014/07/10/taking-a-moment-unit-testing-time-sensitive-code</id>
+    <content type="html"><![CDATA[<p>Let&rsquo;s assume you have a piece of time-sensitive JavaScript code, where the result
+of its execution depends on the time when it is executed:</p>
+
+<p>```javascript src/greeter.js
+&lsquo;use strict&rsquo;;</p>
+
+<p>function Greeter() {}</p>
+
+<p>Greeter.prototype.greet = function() {</p>
+
+<pre><code>var now = new Date().getHours();
+
+if (5 &lt;= now &amp;&amp; now &lt;= 12) {
+    return 'Good morning';
+} else {
+    return 'Hello';
+}
+</code></pre>
+
+<p>};
+```
+How would you test it?</p>
+
+<!--more-->
+
+
+<p>```javascript spec/greeter.spec.js
+describe(&lsquo;Greeter&rsquo;, function() {</p>
+
+<pre><code>it('says "Good morning" between 5 AM and noon', function() {
+    var greeter = new Greeter();
+
+    // todo: control the time ...
+
+    expect(greeter.greet()).to.equal('Good morning');
+});
+</code></pre>
+
+<p>})
+```</p>
+
+<p>Ideally our <code>Greeter</code> object should not be relying on the system time directly,</p>
+
+<h2>Inject the date</h2>
+
+<p>describe(&lsquo;Greeter&rsquo;, function() {</p>
+
+<pre><code>it('says "Good morning" between 5 AM and noon', function() {
+    var greeter = new Greeter();
+
+    // todo: control the time ...
+
+    expect(greeter.greet()).to.equal('Good morning');
+});
+</code></pre>
+
+<p>})</p>
+
+<h2>Replace Date with Moment</h2>
+
+<p>OK, but what if you can&rsquo;t change the code? Use sinon.</p>
+]]></content>
+  </entry>
+  
+</feed>

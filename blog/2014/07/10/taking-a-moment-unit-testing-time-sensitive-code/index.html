@@ -9,13 +9,13 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Blog index - smartcode ltd</title>
+    <title>Taking a Moment - Unit Testing Time-Sensitive Code - smartcode ltd</title>
     <meta name="author" content="Jan Molak">
     
     <meta name="description" content="Software engineering consultancy for agile teams. Get in touch and find out how smartcode can help your organisation develop even more amazing &hellip;">
     
     <meta name="viewport" content="width=device-width">
-    <link rel="canonical" href="http://smartcodeltd.github.io/blog/archives">
+    <link rel="canonical" href="http://smartcodeltd.github.io/blog/2014/07/10/taking-a-moment-unit-testing-time-sensitive-code">
     
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
@@ -63,35 +63,28 @@
         <div class="grid__item two-thirds lap-one-whole palm-one-whole">
         
 
-          
-<h1 class="title indent">
-  Blog Index
-</h1>
-<hr class="divider">
+          <article class="post">
+  <header>
+  
+  <h1 class="title indent">Taking a Moment - Unit Testing Time-Sensitive Code</h1>
+  
 
-
-<div id="archive-list">
   
-  
-  
+  <div class="meta clearfix">
     
-    <h2>2014</h2>
+
+
+
+
+
+
+
+
   
-    <article>
-      
 
-<div class="grid">
 
-  <div class="grid__item one-fifth palm-one-whole">
-    <time datetime="2014-07-10T21:59:05+01:00" pubdate>
-      <span class='month'>Jul</span> <span class='day'>10</span>
-    </time>
-  </div>
-  <div class="grid__item four-fifths palm-one-whole">
-    <h1 class="gamma"><a href="/blog/2014/07/10/taking-a-moment-unit-testing-time-sensitive-code/">Taking a Moment - Unit Testing Time-Sensitive Code</a></h1>
+<time class="pull-left" datetime="2014-07-10T21:59:05+01:00" pubdate data-updated="true"><i class="icon-calendar"></i> Jul 10<sup>th</sup>, 2014</time>
     
-    <footer class="meta">
-      
 
   <div>
     <i class="icon-tags"></i>
@@ -108,59 +101,104 @@
     </ul>
   </div>
 
-    </footer>
     
-    <hr class="divider">
   </div>
+  
+</header>
 
+
+
+
+  <p>Let&rsquo;s assume you have a piece of time-sensitive JavaScript code, where the result
+of its execution depends on the time when it is executed:</p>
+
+<figure class='code'><figcaption><span>src/greeter.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="s1">&#39;use strict&#39;</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">function</span> <span class="nx">Greeter</span><span class="p">()</span> <span class="p">{}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">Greeter</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">greet</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">now</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">getHours</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="mi">5</span> <span class="o">&lt;=</span> <span class="nx">now</span> <span class="o">&amp;&amp;</span> <span class="nx">now</span> <span class="o">&lt;=</span> <span class="mi">12</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="s1">&#39;Good morning&#39;</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="s1">&#39;Hello&#39;</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>How would you test it?</p>
+
+<!--more-->
+
+
+
+
+<figure class='code'><figcaption><span>spec/greeter.spec.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">describe</span><span class="p">(</span><span class="s1">&#39;Greeter&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;says &quot;Good morning&quot; between 5 AM and noon&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="kd">var</span> <span class="nx">greeter</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Greeter</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="c1">// todo: control the time ...</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="nx">expect</span><span class="p">(</span><span class="nx">greeter</span><span class="p">.</span><span class="nx">greet</span><span class="p">()).</span><span class="nx">to</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="s1">&#39;Good morning&#39;</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'><span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Ideally our <code>Greeter</code> object should not be relying on the system time directly,</p>
+
+<h2>Inject the date</h2>
+
+<p>describe(&lsquo;Greeter&rsquo;, function() {</p>
+
+<pre><code>it('says "Good morning" between 5 AM and noon', function() {
+    var greeter = new Greeter();
+
+    // todo: control the time ...
+
+    expect(greeter.greet()).to.equal('Good morning');
+});
+</code></pre>
+
+<p>})</p>
+
+<h2>Replace Date with Moment</h2>
+
+<p>OK, but what if you can&rsquo;t change the code? Use sinon.</p>
+
+
+</article>
+
+ 
+<section id="disqus">
+  <h1 class="indent title">Comments</h1>
+  <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 </div>
-    </article>
-  
-  
-  
-    <article>
-      
-
-<div class="grid">
-
-  <div class="grid__item one-fifth palm-one-whole">
-    <time datetime="2014-07-06T16:10:53+01:00" pubdate>
-      <span class='month'>Jul</span> <span class='day'>06</span>
-    </time>
-  </div>
-  <div class="grid__item four-fifths palm-one-whole">
-    <h1 class="gamma"><a href="/blog/2014/07/06/objects-under-construction/">Objects under construction</a></h1>
-    
-    <footer class="meta">
-      
-
-  <div>
-    <i class="icon-tags"></i>
-    <ul class="tags unstyled">
-    
-      
-        <li><a class='category' href='/blog/categories/design-patterns/'>design patterns</a></li>
-      
-        <li><a class='category' href='/blog/categories/javascript/'>javascript</a></li>
-      
-        <li><a class='category' href='/blog/categories/oop/'>oop</a></li>
-      
-        <li><a class='category' href='/blog/categories/tutorial/'>tutorial</a></li>
-      
-    
-    </ul>
-  </div>
-
-    </footer>
-    
-    <hr class="divider">
-  </div>
-
-</div>
-    </article>
-  
-</div>
-
+</section>
 
 
         </div>
@@ -267,7 +305,10 @@
   var disqus_shortname = 'smartcodeltd';
   
     
-    var disqus_script = 'count.js';
+    // var disqus_developer = 1;
+    var disqus_identifier = 'http://smartcodeltd.github.io/blog/2014/07/10/taking-a-moment-unit-testing-time-sensitive-code/';
+    var disqus_url = 'http://smartcodeltd.github.io/blog/2014/07/10/taking-a-moment-unit-testing-time-sensitive-code/';
+    var disqus_script = 'embed.js';
   
   (function () {
     var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
