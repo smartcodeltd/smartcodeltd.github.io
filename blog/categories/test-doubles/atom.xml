@@ -4,7 +4,7 @@
   <title><![CDATA[Category: test doubles | smartcode ltd]]></title>
   <link href="http://smartcodeltd.github.io/blog/categories/test-doubles/atom.xml" rel="self"/>
   <link href="http://smartcodeltd.github.io/"/>
-  <updated>2014-07-22T23:32:26+01:00</updated>
+  <updated>2014-07-22T23:43:34+01:00</updated>
   <id>http://smartcodeltd.github.io/</id>
   <author>
     <name><![CDATA[Jan Molak]]></name>
@@ -61,7 +61,7 @@ this.loginCount: function() {
 
 <p>that delegates the process of logging users in to the <code>Authoriser</code>, which implementation might look more or less like this:</p>
 
-<p>```javascript spec/authoriser.js
+<p>```javascript src/authoriser.js
 &lsquo;use strict&rsquo;;</p>
 
 <p>/<em>* @constructor </em>/

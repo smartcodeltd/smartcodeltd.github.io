@@ -4,7 +4,7 @@
   <title><![CDATA[smartcode ltd]]></title>
   <link href="http://smartcodeltd.github.io/atom.xml" rel="self"/>
   <link href="http://smartcodeltd.github.io/"/>
-  <updated>2014-07-22T23:32:26+01:00</updated>
+  <updated>2014-07-22T23:43:34+01:00</updated>
   <id>http://smartcodeltd.github.io/</id>
   <author>
     <name><![CDATA[Jan Molak]]></name>
@@ -82,7 +82,7 @@ Interested to find out? Read on!</p>
 
 <p>that delegates the process of logging users in to the <code>Authoriser</code>, which implementation might look more or less like this:</p>
 
-<figure class='code'><figcaption><span>spec/authoriser.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>src/authoriser.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
