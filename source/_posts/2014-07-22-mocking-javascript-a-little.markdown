@@ -51,7 +51,7 @@ function System(authoriser) {
 
 that delegates the process of logging users in to the `Authoriser`, which implementation might look more or less like this:
 
-```javascript spec/authoriser.js
+```javascript src/authoriser.js
 'use strict';
 
 /** @constructor */
