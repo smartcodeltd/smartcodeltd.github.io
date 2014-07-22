@@ -12,7 +12,7 @@
     <title>Blog index - smartcode ltd</title>
     <meta name="author" content="Jan Molak">
     
-    <meta name="description" content="Software engineering consultancy for agile teams. Get in touch and find out how smartcode can help your organisation develop even more amazing &hellip;">
+    <meta name="description" content="Software engineering consultancy for agile teams. Get in touch and find out how smartcode can help you develop even more amazing software!">
     
     <meta name="viewport" content="width=device-width">
     <link rel="canonical" href="http://smartcodeltd.github.io/blog/archives">
@@ -45,8 +45,8 @@
 <label for="toggle" class="toggle" data-open="Main Menu" data-close="Close Menu"></label>
 <ul class="menu pull-right">
   <li><a href="/">Home</a></li>
-  <li><a href="/contact/">Get in touch!</a></li>
-  <!--<li><a href="/blog/">Blog</a></li>-->
+    <li><a href="/blog/">Blog</a></li>
+    <li><a href="/contact/">Get in touch!</a></li>
 </ul>
   </nav>
 </div>
@@ -71,6 +71,54 @@
 
 
 <div id="archive-list">
+  
+  
+  
+    
+    <h2>2014</h2>
+  
+    <article>
+      
+
+<div class="grid">
+
+  <div class="grid__item one-fifth palm-one-whole">
+    <time datetime="2014-07-22T22:10:57+01:00" pubdate>
+      <span class='month'>Jul</span> <span class='day'>22</span>
+    </time>
+  </div>
+  <div class="grid__item four-fifths palm-one-whole">
+    <h1 class="gamma"><a href="/blog/2014/07/22/mocking-javascript-a-little/">Mocking JavaScript a little</a></h1>
+    
+    <footer class="meta">
+      
+
+  <div>
+    <i class="icon-tags"></i>
+    <ul class="tags unstyled">
+    
+      
+        <li><a class='category' href='/blog/categories/chai/'>chai</a></li>
+      
+        <li><a class='category' href='/blog/categories/mocha/'>mocha</a></li>
+      
+        <li><a class='category' href='/blog/categories/sinon/'>sinon</a></li>
+      
+        <li><a class='category' href='/blog/categories/tdd/'>tdd</a></li>
+      
+        <li><a class='category' href='/blog/categories/test-doubles/'>test doubles</a></li>
+      
+    
+    </ul>
+  </div>
+
+    </footer>
+    
+    <hr class="divider">
+  </div>
+
+</div>
+    </article>
   
 </div>
 
@@ -105,6 +153,10 @@
   <section id="recent-posts" class="aside-module grid__item one-whole lap-one-half">
   <h1 class="title delta">Recent Posts</h1>
   <ul class="divided">
+    
+      <li class="post">
+        <a href="/blog/2014/07/22/mocking-javascript-a-little/">Mocking JavaScript a little</a>
+      </li>
     
   </ul>
 </section>
@@ -181,6 +233,16 @@
   }());
 </script>
 
+<script defer>
+    'use strict';
+    
+    $(document).ready(function(){
+        var current = window.location.href.split('/').slice(4, 8).join('-'),
+            $link   = $('#pull-request-link');
+
+        $link.attr('href', 'https://github.com/smartcodeltd/smartcodeltd.github.io/edit/source/source/_posts/' + current + '.markdown')
+    });
+</script>
 
 
 

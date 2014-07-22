@@ -12,7 +12,7 @@
     <title>smartcode ltd</title>
     <meta name="author" content="Jan Molak">
     
-    <meta name="description" content="Software engineering consultancy for agile teams. Get in touch and find out how smartcode can help your organisation develop even more amazing &hellip;">
+    <meta name="description" content="Software engineering consultancy for agile teams. Get in touch and find out how smartcode can help you develop even more amazing software!">
     
     <meta name="viewport" content="width=device-width">
     <link rel="canonical" href="http://smartcodeltd.github.io/blog">
@@ -45,8 +45,8 @@
 <label for="toggle" class="toggle" data-open="Main Menu" data-close="Close Menu"></label>
 <ul class="menu pull-right">
   <li><a href="/">Home</a></li>
-  <li><a href="/contact/">Get in touch!</a></li>
-  <!--<li><a href="/blog/">Blog</a></li>-->
+    <li><a href="/blog/">Blog</a></li>
+    <li><a href="/contact/">Get in touch!</a></li>
 </ul>
   </nav>
 </div>
@@ -66,6 +66,79 @@
           
 
   <!-- for post in paginator.posts -->
+  
+    
+    <article class="listing">
+      <header>
+  
+  <h1 class="beta">
+    <a href="/blog/2014/07/22/mocking-javascript-a-little/">Mocking JavaScript a little</a>
+  </h1>
+  
+
+  
+  <div class="meta clearfix">
+    
+    
+
+
+    
+        <span class="byline author vcard pull-left">by <span class="fn">Jan Molak</span></span>
+    
+
+    
+
+
+
+
+
+
+
+
+  
+
+
+<time class="pull-left" datetime="2014-07-22T22:10:57+01:00" pubdate data-updated="true"><i class="icon-calendar"></i> Jul 22<sup>nd</sup>, 2014</time>
+    
+
+  <div>
+    <i class="icon-tags"></i>
+    <ul class="tags unstyled">
+    
+      
+        <li><a class='category' href='/blog/categories/chai/'>chai</a></li>
+      
+        <li><a class='category' href='/blog/categories/mocha/'>mocha</a></li>
+      
+        <li><a class='category' href='/blog/categories/sinon/'>sinon</a></li>
+      
+        <li><a class='category' href='/blog/categories/tdd/'>tdd</a></li>
+      
+        <li><a class='category' href='/blog/categories/test-doubles/'>test doubles</a></li>
+      
+    
+    </ul>
+  </div>
+
+    
+  </div>
+  
+</header>
+
+
+
+
+<div class="entry-content clearfix">
+  <p>How do you write a test in which you cannot (or chose not to) use real dependencies of whatever is that you&rsquo;re testing?
+What are your options in JavaScript? And what does a test doubles library give you that plain-old-js can&rsquo;t?
+Interested to find out? Read on!</p>
+
+
+  <a class="btn pull-right" href="/blog/2014/07/22/mocking-javascript-a-little/">Read on &rarr;</a>
+</div>
+
+    </article>
+    <hr />
   
 
   <div class="pagination">
@@ -103,6 +176,10 @@
   <section id="recent-posts" class="aside-module grid__item one-whole lap-one-half">
   <h1 class="title delta">Recent Posts</h1>
   <ul class="divided">
+    
+      <li class="post">
+        <a href="/blog/2014/07/22/mocking-javascript-a-little/">Mocking JavaScript a little</a>
+      </li>
     
   </ul>
 </section>
@@ -179,6 +256,16 @@
   }());
 </script>
 
+<script defer>
+    'use strict';
+    
+    $(document).ready(function(){
+        var current = window.location.href.split('/').slice(4, 8).join('-'),
+            $link   = $('#pull-request-link');
+
+        $link.attr('href', 'https://github.com/smartcodeltd/smartcodeltd.github.io/edit/source/source/_posts/' + current + '.markdown')
+    });
+</script>
 
 
 
