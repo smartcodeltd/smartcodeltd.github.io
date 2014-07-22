@@ -10,6 +10,8 @@ is_post: true
 {% if site.disqus_short_name and page.comments == true %} 
 <section id="disqus">
   <h1 class="indent title">Comments</h1>
+  <p>If you find a mistake or issue in this article, please <a id="pull-request-link" taget="_blank" href="">fix it and submit a pull request on Github</a>. Thanks!</p>
+
   <div id="disqus_thread" aria-live="polite">{% include blog/post/disqus_thread.html %}</div>
 </section>
 {% endif %}

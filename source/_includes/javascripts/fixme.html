@@ -1,0 +1,10 @@
+<script defer>
+    'use strict';
+    
+    $(document).ready(function(){
+        var current = window.location.href.split('/').slice(4, 8).join('-'),
+            $link   = $('#pull-request-link');
+
+        $link.attr('href', 'https://github.com/smartcodeltd/smartcodeltd.github.io/edit/source/source/_posts/' + current + '.markdown')
+    });
+</script>

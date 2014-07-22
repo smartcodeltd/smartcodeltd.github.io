@@ -49,3 +49,16 @@
 }
 
 h1 { font-size:2em; }
+
+.btn { padding:5px 15px; font-size:80%; }
+
+h1,h2,h3,h4,h5 { font-weight: normal; }
+aside { padding-left:40px !important; }
+
+article .meta {
+  color: #666;
+
+  &>.author {
+    margin-right: 20px;
+  }
+}
