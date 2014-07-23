@@ -1,0 +1,940 @@
+<!doctype html>
+  <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+  <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+  <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+  <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+
+  
+    
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Mocking JavaScript a little - smartcode ltd</title>
+    <meta name="author" content="Jan Molak">
+    
+    <meta name="description" content="Software engineering consultancy for agile teams. Get in touch and find out how smartcode can help you develop even more amazing software!">
+    
+    <meta name="viewport" content="width=device-width">
+    <link rel="canonical" href="http://smartcodeltd.github.io/blog/2014/07/22/mocking-javascript-a-little">
+    
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="/touch-icon-iphone-precomposed.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/touch-icon-ipad-precomposed.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/touch-icon-iphone-retina-precomposed.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/touch-icon-ipad-retina-precomposed.png">
+
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet">
+    <link href="/atom.xml" rel="alternate" title="smartcode ltd" type="application/atom+xml">
+  </head>
+
+
+  <body >
+
+    <header>
+      <div class="grid-wrapper">
+  <div class="grid">
+
+    <div class="grid__item two-fifths lap-four-fifths palm-one-whole">
+  <a href="/" class="site-title logo"><img src="/images/smartcodeltd_logo.png" alt="smartcode ltd" /></a>
+</div>
+
+<div class="grid__item three-fifths lap-one-fifth palm-one-whole">
+  <nav>
+    <input type="checkbox" id="toggle">
+<label for="toggle" class="toggle" data-open="Main Menu" data-close="Close Menu"></label>
+<ul class="menu pull-right">
+  <li><a href="/">Home</a></li>
+    <li><a href="/blog/">Blog</a></li>
+    <li><a href="/contact/">Get in touch!</a></li>
+</ul>
+  </nav>
+</div>
+
+  </div>
+</div>
+    </header>
+
+    
+
+    <div class="grid-wrapper">
+      <div class="grid grid-center">
+        
+        <div class="grid__item two-thirds lap-one-whole palm-one-whole">
+        
+
+          <article class="post">
+  <header>
+  
+  <h1 class="title indent">Mocking JavaScript a little</h1>
+  
+
+  
+  <div class="meta clearfix">
+    
+    
+
+
+    
+        <span class="byline author vcard pull-left">by <span class="fn">Jan Molak</span></span>
+    
+
+    
+
+
+
+
+
+
+
+
+  
+
+
+<time class="pull-left" datetime="2014-07-22T22:10:57+01:00" pubdate data-updated="true"><i class="icon-calendar"></i> Jul 22<sup>nd</sup>, 2014</time>
+    
+
+  <div>
+    <i class="icon-tags"></i>
+    <ul class="tags unstyled">
+    
+      
+        <li><a class='category' href='/blog/categories/chai/'>chai</a></li>
+      
+        <li><a class='category' href='/blog/categories/mocha/'>mocha</a></li>
+      
+        <li><a class='category' href='/blog/categories/sinon/'>sinon</a></li>
+      
+        <li><a class='category' href='/blog/categories/tdd/'>tdd</a></li>
+      
+        <li><a class='category' href='/blog/categories/test-doubles/'>test doubles</a></li>
+      
+    
+    </ul>
+  </div>
+
+    
+  </div>
+  
+</header>
+
+
+
+
+  <p>How do you write a test in which you cannot (or chose not to) use real dependencies of whatever is that you&rsquo;re testing?
+What are your options in JavaScript? And what does a test doubles library give you that plain-old-js can&rsquo;t?
+Interested to find out? Read on!</p>
+
+<!--more-->
+
+
+<h2>System under test</h2>
+
+<p>Let&rsquo;s assume we have a situation similar to the one described by Uncle Bob Martin in &ldquo;The Little Mocker&rdquo;<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>.</p>
+
+<p>We have a <code>System</code>:</p>
+
+<figure class='code'><figcaption><span>src/system.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="s1">&#39;use strict&#39;</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/**</span>
+</span><span class='line'><span class="cm"> * @constructor</span>
+</span><span class='line'><span class="cm"> * @param {Authoriser} authoriser</span>
+</span><span class='line'><span class="cm"> */</span>
+</span><span class='line'><span class="kd">function</span> <span class="nx">System</span><span class="p">(</span><span class="nx">authoriser</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="cm">/** @private */</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">login_count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="cm">/** @public */</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">login</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">username</span><span class="p">,</span> <span class="nx">password</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nx">authoriser</span><span class="p">.</span><span class="nx">authorise</span><span class="p">(</span><span class="nx">username</span><span class="p">,</span> <span class="nx">password</span><span class="p">))</span> <span class="p">{</span>
+</span><span class='line'>            <span class="o">++</span><span class="nx">login_count</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="cm">/** @public */</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">loginCount</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="nx">login_count</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">};</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>that delegates the process of logging users in to the <code>Authoriser</code>, which implementation might look more or less like this:</p>
+
+<figure class='code'><figcaption><span>src/authoriser.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="s1">&#39;use strict&#39;</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/** @constructor */</span>
+</span><span class='line'><span class="kd">function</span> <span class="nx">Authoriser</span><span class="p">()</span> <span class="p">{</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/**</span>
+</span><span class='line'><span class="cm"> * @public</span>
+</span><span class='line'><span class="cm"> *</span>
+</span><span class='line'><span class="cm"> * @param {String} username</span>
+</span><span class='line'><span class="cm"> * @param {String} password</span>
+</span><span class='line'><span class="cm"> *</span>
+</span><span class='line'><span class="cm"> * @returns {Boolean}</span>
+</span><span class='line'><span class="cm"> */</span>
+</span><span class='line'><span class="nx">Authoriser</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">authorise</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">username</span><span class="p">,</span> <span class="nx">password</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// connects to LDAP or some database, verifies user credentials</span>
+</span><span class='line'>    <span class="c1">// returns true if the username/password pair is valid, false otherwise</span>
+</span><span class='line'>    <span class="c1">// ...</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>A dummy</h2>
+
+<p>How can we prove that a newly created <code>System</code> has no logged in users?
+And do we even need to construct a real <code>Authoriser</code> object for that?</p>
+
+<p>Since we know that calling <code>system.loginCount</code> does not even touch the <code>authoriser</code> object,
+we can replace the <code>authoriser</code> with <strong>a dummy</strong>:</p>
+
+<figure class='code'><figcaption><span>spec/system.spec.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">describe</span><span class="p">(</span><span class="s1">&#39;A newly created System&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">dummy_authoriser</span> <span class="o">=</span> <span class="p">{</span> <span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;has no logged in users&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="kd">var</span> <span class="nx">system</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">System</span><span class="p">(</span><span class="nx">dummy_authoriser</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="nx">expect</span><span class="p">(</span><span class="nx">system</span><span class="p">.</span><span class="nx">loginCount</span><span class="p">()).</span><span class="nx">to</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And that&rsquo;s all there is to a dummy! You pass it into something when you have to provide an argument,
+but you know that it will never be used.</p>
+
+<h2>A stub</h2>
+
+<p>Let&rsquo;s now suppose that you want to test a part of your <code>System</code> that requires you to be logged in.</p>
+
+<p>Of course you might say that you could <em>just log in</em>, but you&rsquo;ve already tested that login works,
+and since the process of logging in takes time, why do it twice? Also, if there&rsquo;s a bug in login your test
+would fail too! That&rsquo;s an unnecessary coupling that can be easily avoided with <strong>a stub</strong>:</p>
+
+<figure class='code'><figcaption><span>spec/system.spec.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">describe</span><span class="p">(</span><span class="s1">&#39;A System with a logged in user&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">accepting_authoriser</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">authorise</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="kc">true</span><span class="p">;</span> <span class="p">}</span> <span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;has a loginCount of 1&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="kd">var</span> <span class="nx">system</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">System</span><span class="p">(</span><span class="nx">accepting_authoriser</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="nx">system</span><span class="p">.</span><span class="nx">login</span><span class="p">(</span><span class="s1">&#39;bob&#39;</span><span class="p">,</span> <span class="s1">&#39;SecretPassword&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="nx">expect</span><span class="p">(</span><span class="nx">system</span><span class="p">.</span><span class="nx">loginCount</span><span class="p">()).</span><span class="nx">to</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>So what does this stubbed <code>accepting_authoriser</code> do? It returns true, therefore accepting any username/password pairs.</p>
+
+<p>If you now wanted to test another part of your system that handles unauthorised users you could create a <code>rejecting_authoriser</code> like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">rejecting_authoriser</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">authorise</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="kc">false</span><span class="p">;</span> <span class="p">}</span> <span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>So that&rsquo;s a stub, it simply returns a value and has no other logic in it.</p>
+
+<blockquote><p>Stubs provide canned answers to calls made during the test, usually not responding at all to anything outside what&#8217;s programmed in for the test.</p><footer><strong>Martin Fowler</strong> <cite>Test Double</cite></footer></blockquote>
+
+
+<p>Beautiful! So nice and simple, isn&rsquo;t it? Just one line of code! Isn&rsquo;t duck typing brilliant?
+Imagine how much more code you&rsquo;d have to write if you were using Java or C#!
+You&rsquo;d probably have to create an <code>Authoriser</code> interface in the first place,
+then make sure both the real implementation and your stub <code>implement</code> that <code>interface</code>, then &hellip;</p>
+
+<p>Oh yeah, the <code>interface</code>&hellip; We don&rsquo;t have this construct in JavaScript, do we?</p>
+
+<p>The trouble with using plain-old-js for hand-rolling your test stubs
+is that you won&rsquo;t get a meaningful error when the interface of the stubbed-out object changes
+and your test stubs are no longer correct. In worst case scenario you might not even get an error at all!</p>
+
+<p>What could be the consequences of this, you may ask?
+Well, I&rsquo;ve seen huge test suites pass even though the application they were supposed to test was fundamentally broken
+as half the code didn&rsquo;t even exist anymore&hellip; Trust me, you don&rsquo;t want to be there<sup id="fnref:2"><a href="#fn:2" rel="footnote">2</a></sup> :&ndash;)</p>
+
+<p>Right, so this situation is not cool, but can we do better than that? Yes we can! Enter sinon.js<sup id="fnref:3"><a href="#fn:3" rel="footnote">3</a></sup>!</p>
+
+<p>How would the <code>accepting_authoriser</code> look implemented with sinon then?</p>
+
+<figure class='code'><figcaption><span>spec/system.spec.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">describe</span><span class="p">(</span><span class="s1">&#39;A System with a logged in user&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">accepting_authoriser</span> <span class="o">=</span> <span class="nx">sinon</span><span class="p">.</span><span class="nx">createStubInstance</span><span class="p">(</span><span class="nx">Authoriser</span><span class="p">);</span>
+</span><span class='line'>    <span class="nx">accepting_authoriser</span><span class="p">.</span><span class="nx">authorise</span><span class="p">.</span><span class="nx">returns</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;has a loginCount of 1&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="kd">var</span> <span class="nx">system</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">System</span><span class="p">(</span><span class="nx">accepting_authoriser</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="nx">system</span><span class="p">.</span><span class="nx">login</span><span class="p">(</span><span class="s1">&#39;bob&#39;</span><span class="p">,</span> <span class="s1">&#39;SecretPassword&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="nx">expect</span><span class="p">(</span><span class="nx">system</span><span class="p">.</span><span class="nx">loginCount</span><span class="p">()).</span><span class="nx">to</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And what makes it different? Calling <code>sinon.createStubInstance(Authoriser)</code> creates a stub object
+that allows you to stub out only those methods that exist on the <code>prototype</code> of the original <code>Authoriser</code>.</p>
+
+<p>Now that&rsquo;s important because it means that should the <code>#authorise</code> method happily decide to change its
+name to say <code>#isAuthorised</code> one day, you&rsquo;d get a <code>TypeError</code> <em>in your test</em>,
+exactly where you attempt to stub out the no longer existing <code>#authorise</code>. Cool, right?</p>
+
+<h2>A spy</h2>
+
+<p>Do you remember when I said in the beginning that <code>System</code>
+delegates the process of logging users in to the <code>Authoriser</code>?
+How can we test whether or not this interaction really takes place?
+What we&rsquo;d need to do is spy on the caller to see inside the workings of the algorithm we&rsquo;re testing &ndash;
+and that&rsquo;s precisely what <strong>spies</strong> are for<sup id="fnref:4"><a href="#fn:4" rel="footnote">4</a></sup>:</p>
+
+<figure class='code'><figcaption><span>spec/system.spec.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">describe</span><span class="p">(</span><span class="s1">&#39;A System&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">accepting_authoriser_spy</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="nx">authorise_was_called</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="nx">authorise</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">this</span><span class="p">.</span><span class="nx">authorise_was_called</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>            <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">afterEach</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">accepting_authoriser_spy</span><span class="p">.</span><span class="nx">authorise_was_called</span> <span class="o">=</span> <span class="kc">false</span>
+</span><span class='line'>    <span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;delegates logging users in to the authoriser&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="kd">var</span> <span class="nx">system</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">System</span><span class="p">(</span><span class="nx">accepting_authoriser_spy</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="nx">system</span><span class="p">.</span><span class="nx">login</span><span class="p">(</span><span class="s1">&#39;bob&#39;</span><span class="p">,</span> <span class="s1">&#39;SecretPassword&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="nx">expect</span><span class="p">(</span><span class="nx">accepting_authoriser_spy</span><span class="p">.</span><span class="nx">authorise_was_called</span><span class="p">).</span><span class="nx">to</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You inject a spy object in exactly the same way you&rsquo;d inject a stub, but then at the end of your test
+you check if the interactions recorded by your spy are the ones you expected it to see.</p>
+
+<blockquote><p>Spies are stubs that also record some information based on how they were called.</p><footer><strong>Martin Fowler</strong> <cite>Test Double</cite></footer></blockquote>
+
+
+<p>Another thing to note is that
+because a spy maintains state (<code>authorise_was_called</code> flag in this example), it needs to be reset between the tests
+to avoid one test case affecting another &ndash; this is done in the <code>afterEach</code> block.</p>
+
+<p>Of course our hand-rolled implementation suffers from the problems I described earlier when we talked
+about hand-rolling stubs. Let&rsquo;s improve our previous implementation with sinon:</p>
+
+<figure class='code'><figcaption><span>spec/system.spec.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">describe</span><span class="p">(</span><span class="s1">&#39;A System&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">accepting_authoriser</span> <span class="o">=</span> <span class="nx">sinon</span><span class="p">.</span><span class="nx">createStubInstance</span><span class="p">(</span><span class="nx">Authoriser</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">accepting_authoriser</span><span class="p">.</span><span class="nx">authorise</span><span class="p">.</span><span class="nx">returns</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">afterEach</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">accepting_authoriser</span><span class="p">.</span><span class="nx">authorise</span><span class="p">.</span><span class="nx">restore</span><span class="p">();</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;delegates logging users in to the authoriser&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="kd">var</span> <span class="nx">system</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">System</span><span class="p">(</span><span class="nx">accepting_authoriser</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="nx">system</span><span class="p">.</span><span class="nx">login</span><span class="p">(</span><span class="s1">&#39;bob&#39;</span><span class="p">,</span> <span class="s1">&#39;SecretPassword&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="nx">expect</span><span class="p">(</span><span class="nx">accepting_authoriser</span><span class="p">.</span><span class="nx">authorise</span><span class="p">).</span><span class="nx">to</span><span class="p">.</span><span class="nx">have</span><span class="p">.</span><span class="nx">been</span><span class="p">.</span><span class="nx">called</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Similarly to the stub example, I&rsquo;m also using <code>sinon.createStubInstance</code> here.</p>
+
+<p>There&rsquo;s one significant difference between our hand-rolled spy implementation and the one above though:
+<strong>sinon spy</strong> itself is not the main object you inject, it&rsquo;s a <strong>wrapper around object&rsquo;s method</strong>.
+That&rsquo;s why I inject the <code>accepting_authoriser</code> but perform the assertion on <code>accepting_authoriser.authorise</code> spy and
+use <code>accepting_authoriser.authorise.restore()</code> to reset it.</p>
+
+<p>Additionally, the fact that sinon spy is a wrapper means that if you wanted to spy
+on the real <code>Authoriser's</code> method you could do it like so:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">authoriser</span>    <span class="o">=</span> <span class="k">new</span> <span class="nx">Authoriser</span><span class="p">(),</span>
+</span><span class='line'>    <span class="nx">system</span>        <span class="o">=</span> <span class="k">new</span> <span class="nx">System</span><span class="p">(</span><span class="nx">authoriser</span><span class="p">),</span>
+</span><span class='line'>    <span class="nx">authorise_spy</span> <span class="o">=</span> <span class="nx">sinon</span><span class="p">.</span><span class="nx">spy</span><span class="p">(</span><span class="nx">authoriser</span><span class="p">,</span> <span class="s1">&#39;authorise&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">system</span><span class="p">.</span><span class="nx">login</span><span class="p">(</span><span class="s1">&#39;bob&#39;</span><span class="p">,</span> <span class="s1">&#39;SecretPassword&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">expect</span><span class="p">(</span><span class="nx">authorise_spy</span><span class="p">).</span><span class="nx">to</span><span class="p">.</span><span class="nx">have</span><span class="p">.</span><span class="nx">been</span><span class="p">.</span><span class="nx">called</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>A mock</h2>
+
+<blockquote><p>A mock is not so interested in the return values of functions.<br/>It&#8217;s more interested in what function were called, with what arguments, when, and how often.</p><footer><strong>Robert Martin (Uncle Bob)</strong> <cite>The Little Mocker</cite></footer></blockquote>
+
+
+<p>Another thing that makes a mock<sup id="fnref:5"><a href="#fn:5" rel="footnote">5</a></sup> different from a stub is its <code>verify</code> method,
+which groups all the assertions and performs them at the end of a test, verifying our <code>System's</code> <strong>behaviour</strong>:</p>
+
+<figure class='code'><figcaption><span>spec/system.spec.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">describe</span><span class="p">(</span><span class="s1">&#39;A System&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">accepting_authoriser_mock</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="nx">authorise_was_called</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="nx">authorise</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">this</span><span class="p">.</span><span class="nx">authorise_was_called</span>  <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+</span><span class='line'>            <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">},</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="nx">verify</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">expect</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">authorise_was_called</span><span class="p">).</span><span class="nx">to</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;delegates logging users in to the authoriser&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="kd">var</span> <span class="nx">system</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">System</span><span class="p">(</span><span class="nx">accepting_authoriser_mock</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="nx">system</span><span class="p">.</span><span class="nx">login</span><span class="p">(</span><span class="s1">&#39;bob&#39;</span><span class="p">,</span> <span class="s1">&#39;SecretPassword&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="nx">accepting_authoriser_mock</span><span class="p">.</span><span class="nx">verify</span><span class="p">();</span> <span class="c1">// assertions moved to #verify</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now that we understand how mocks work and we know how to build them ourselves,
+let&rsquo;s see how sinon can make things easier. There&rsquo;s an essential distinction we need to make
+before diving into sinon mocks though:</p>
+
+<blockquote><p>In Sinon, the basic unit of faking is functions, always functions.<br/>So a &#8220;stub object&#8221; in Java-type literature translates to a &#8220;stub function/method&#8221; in Sinon/JavaScript land.</p><footer><strong>Christian Johansen</strong> <cite>&#8220;Test Spies&#44; Stubs and Mocks - Part 1.5&#8221;</cite></footer></blockquote>
+
+
+<p>&hellip; and same goes for sinon mocks. OK, but what does this mean to you? Let&rsquo;s have a look at differences in the implementation first:</p>
+
+<figure class='code'><figcaption><span>spec/system.spec.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">describe</span><span class="p">(</span><span class="s1">&#39;A System&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">authoriser</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Authoriser</span><span class="p">(),</span>
+</span><span class='line'>        <span class="nx">mock</span>       <span class="o">=</span> <span class="nx">sinon</span><span class="p">.</span><span class="nx">mock</span><span class="p">(</span><span class="nx">authoriser</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">afterEach</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">mock</span><span class="p">.</span><span class="nx">restore</span><span class="p">();</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;delegates logging users in to the authoriser&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="c1">// prepare</span>
+</span><span class='line'>        <span class="kd">var</span> <span class="nx">system</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">System</span><span class="p">(</span><span class="nx">authoriser</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="c1">// expect</span>
+</span><span class='line'>        <span class="nx">mock</span><span class="p">.</span><span class="nx">expects</span><span class="p">(</span><span class="s1">&#39;authorise&#39;</span><span class="p">).</span><span class="nx">once</span><span class="p">().</span><span class="nx">returns</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="c1">// act</span>
+</span><span class='line'>        <span class="nx">system</span><span class="p">.</span><span class="nx">login</span><span class="p">(</span><span class="s1">&#39;bob&#39;</span><span class="p">,</span> <span class="s1">&#39;SecretPassword&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="c1">// assert</span>
+</span><span class='line'>        <span class="nx">mock</span><span class="p">.</span><span class="nx">verify</span><span class="p">();</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>An important thing to note here is that sinon mock is created as a wrapper around
+an instance of the <strong>real</strong> <code>Authoriser</code>, but instead of the mock we&rsquo;re injecting the already mentioned <strong>real</strong> instance
+into the <code>System</code>.</p>
+
+<p>This strategy might be problematic if instantiation of your depended-on object (<code>Authoriser</code> in our example)
+is expensive; If that&rsquo;s the case you might want to avoid calling the constructor directly by using <code>Object.create</code><sup id="fnref:6"><a href="#fn:6" rel="footnote">6</a></sup>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">authoriser</span> <span class="o">=</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="nx">Authoriser</span><span class="p">.</span><span class="nx">prototype</span><span class="p">),</span>
+</span><span class='line'>    <span class="nx">mock</span>       <span class="o">=</span> <span class="nx">sinon</span><span class="p">.</span><span class="nx">mock</span><span class="p">(</span><span class="nx">authoriser</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note: At the time of writing sinon.js (version 1.10.3) does not provide any equivalent of <code>createStubInstance</code>
+for mocks.</p>
+
+<h2>A fake</h2>
+
+<blockquote><p>Fake has business behavior. You can drive a fake to behave in different ways by giving it different data.</p><footer><strong>Robert Martin (Uncle Bob)</strong> <cite>The Little Mocker</cite></footer></blockquote>
+
+
+<p>Suppose we wanted to define several personas to whom our <code>System</code> responded differently.
+Let&rsquo;s say &ldquo;bob&rdquo; knows his password and &ldquo;alice&rdquo; forgot it; My personal recommendation
+would be to use two separate stubs, but let&rsquo;s talk about fakes as some might prefer to use them instead:</p>
+
+<figure class='code'><figcaption><span>spec/system.spec.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">describe</span><span class="p">(</span><span class="s1">&#39;A System&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">fake_authoriser</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">authorise</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">username</span><span class="p">,</span> <span class="nx">password</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                <span class="k">return</span> <span class="p">(</span><span class="nx">username</span> <span class="o">===</span> <span class="s1">&#39;bob&#39;</span> <span class="o">&amp;&amp;</span> <span class="nx">password</span> <span class="o">===</span> <span class="s1">&#39;SecretPassword&#39;</span><span class="p">);</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>        <span class="p">},</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="nx">system</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">System</span><span class="p">(</span><span class="nx">fake_authoriser</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;allows Bob in&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">system</span><span class="p">.</span><span class="nx">login</span><span class="p">(</span><span class="s1">&#39;bob&#39;</span><span class="p">,</span> <span class="s1">&#39;SecretPassword&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="nx">expect</span><span class="p">(</span><span class="nx">system</span><span class="p">.</span><span class="nx">loginCount</span><span class="p">()).</span><span class="nx">to</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;does not allow Alice in&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">system</span><span class="p">.</span><span class="nx">login</span><span class="p">(</span><span class="s1">&#39;alice&#39;</span><span class="p">,</span> <span class="s1">&#39;password&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="nx">expect</span><span class="p">(</span><span class="nx">system</span><span class="p">.</span><span class="nx">loginCount</span><span class="p">()).</span><span class="nx">to</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>&hellip; and you could also achieve the same result with sinon:</p>
+
+<figure class='code'><figcaption><span>spec/system.spec.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">describe</span><span class="p">(</span><span class="s1">&#39;A System&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">fake_authoriser</span> <span class="o">=</span> <span class="nx">sinon</span><span class="p">.</span><span class="nx">createStubInstance</span><span class="p">(</span><span class="nx">Authoriser</span><span class="p">);</span>
+</span><span class='line'>        <span class="nx">fake_authoriser</span><span class="p">.</span><span class="nx">authorise</span>
+</span><span class='line'>            <span class="p">.</span><span class="nx">returns</span><span class="p">(</span><span class="kc">false</span><span class="p">)</span>
+</span><span class='line'>            <span class="p">.</span><span class="nx">withArgs</span><span class="p">(</span><span class="s1">&#39;bob&#39;</span><span class="p">,</span> <span class="s1">&#39;SecretPassword&#39;</span><span class="p">).</span><span class="nx">returns</span><span class="p">(</span><span class="kc">true</span><span class="p">),</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="nx">system</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">System</span><span class="p">(</span><span class="nx">fake_authoriser</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;allows Bob in&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">system</span><span class="p">.</span><span class="nx">login</span><span class="p">(</span><span class="s1">&#39;bob&#39;</span><span class="p">,</span> <span class="s1">&#39;SecretPassword&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="nx">expect</span><span class="p">(</span><span class="nx">system</span><span class="p">.</span><span class="nx">loginCount</span><span class="p">()).</span><span class="nx">to</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;does not allow Alice in&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">system</span><span class="p">.</span><span class="nx">login</span><span class="p">(</span><span class="s1">&#39;alice&#39;</span><span class="p">,</span> <span class="s1">&#39;password&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="nx">expect</span><span class="p">(</span><span class="nx">system</span><span class="p">.</span><span class="nx">loginCount</span><span class="p">()).</span><span class="nx">to</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Be very careful with fakes as they can quickly become <strong>extremely</strong> complicated.
+If you can use stubs instead &ndash; please do. If you can&rsquo;t then perhaps
+it just highlighted that the thing you&rsquo;re trying to test is too complex and needs breaking down?</p>
+
+<h2>Tools</h2>
+
+<p>Techniques described in this article can be applied to both front-end and back-end (node.js) development,
+same applies to tools I used in the above examples, namely:</p>
+
+<ul>
+<li><a href="http://visionmedia.github.io/mocha/">mocha</a> &ndash; a popular JavaScript test framework</li>
+<li><a href="http://sinonjs.org/">sinon.js</a> &ndash; test doubles library</li>
+<li><a href="http://chaijs.com/">chai.js</a> and its <a href="http://chaijs.com/api/bdd/">bdd-style</a> assertion library</li>
+<li><a href="https://github.com/domenic/sinon-chai">sinon-chai</a> &ndash; sinon.js assertions for chai</li>
+</ul>
+
+
+<h2>Final thoughts and a word of warning</h2>
+
+<p>Bear in mind that the more you spy and mock, the tighter you couple your tests to the implementation of your system.
+This leads to fragile tests that may break for reasons that shouldn&rsquo;t break them.</p>
+
+<p>Test doubles should be used with care and applied only when they&rsquo;re the best tool for the task at hand.
+Just like with any other tool in your development tool belt: don&rsquo;t use a screwdriver to knock in a nail just
+because you got a new screwdriver and want to try it out ;&ndash;)</p>
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p><a href="http://blog.8thlight.com/uncle-bob/2014/05/14/TheLittleMocker.html">The Little Mocker</a> blog post by Uncle Bob Martin. As you might have already noticed, Uncle Bob&rsquo;s post has inspired this article greatly!<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+<li id="fn:2">
+<p>If you already <em>are</em> in this situation <a href="/contact">get in touch</a>, I can help you to get out of it :&ndash;) OK, no more cheeky marketing. Get back to the article, quick, quick:<a href="#fnref:2" rev="footnote">&#8617;</a></p></li>
+<li id="fn:3">
+<p><a href="http://sinonjs.org/">Sinon.js</a> was written by Christian Johansen, author of <a href="http://www.amazon.co.uk/gp/product/0321683919/ref=as_li_ss_tl?ie=UTF8&amp;camp=1634&amp;creative=19450&amp;creativeASIN=0321683919&amp;linkCode=as2&amp;tag=smartcode-21">this excellent book</a><a href="#fnref:3" rev="footnote">&#8617;</a></p></li>
+<li id="fn:4">
+<p>To better understand what spies and other test doubles are and how to use them I highly recommend reading <a href="http://www.amazon.co.uk/gp/product/0131495054/ref=as_li_ss_tl?ie=UTF8&amp;camp=1634&amp;creative=19450&amp;creativeASIN=0131495054&amp;linkCode=as2&amp;tag=smartcode-21">this book</a><a href="#fnref:4" rev="footnote">&#8617;</a></p></li>
+<li id="fn:5">
+<p>The concept of &ldquo;mock objects&rdquo; was originally introduced by Tim Mackinnon, Steve Freeman and Philip Craig in their paper <a href="http://www.ccs.neu.edu/research/demeter/related-work/extreme-programming/MockObjectsFinal.PDF">Endo-Testing: Unit Testing with Mock Objects</a>. Steve Freeman is a co-author of <a href="http://www.amazon.co.uk/gp/product/0321503627/ref=as_li_ss_tl?ie=UTF8&amp;camp=1634&amp;creative=19450&amp;creativeASIN=0321503627&amp;linkCode=as2&amp;tag=smartcode-21">the GOOSE book</a>. Again, highly recommended.<a href="#fnref:5" rev="footnote">&#8617;</a></p></li>
+<li id="fn:6">
+<p>Object.create is well documented on <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/create">MDN</a><a href="#fnref:6" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
+
+
+</article>
+
+ 
+<section id="disqus">
+  <h1 class="indent title">Comments</h1>
+  <p>If you find a mistake or issue in this article, please <a id="pull-request-link" taget="_blank" href="">fix it and submit a pull request on Github</a>. Thanks!</p>
+
+  <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+
+        </div>
+
+        
+        <aside id="sidebar" class="grid__item one-third lap-one-whole palm-one-whole">
+          <div class="grid">
+
+  
+<section class="social aside-module grid__item one-whole lap-one-half">
+  <h1 class="title delta">
+    Follow Jan!
+  </h1>
+  <ul class="unstyled">
+    
+    
+    <li><a class="github" href="//github.com/jan-molak"><i class="icon-github"></i> Github</a></li>
+    
+    
+    <li><a class="linkedin" href="//linkedin.com/in/janmolak"><i class="icon-linkedin-sign"></i> LinkedIn</a></li>
+    
+    <li><a class="stackoverflow" href="//stackoverflow.com/users/264502"><i class="icon-stackexchange"></i> StackOverflow</a></li>
+    <li><a class="twitter" href="//twitter.com/JanMolak"><i class="icon-twitter"></i> Twitter</a></li>
+    
+  </ul>
+</section>
+
+
+  <section id="recent-posts" class="aside-module grid__item one-whole lap-one-half">
+  <h1 class="title delta">Recent Posts</h1>
+  <ul class="divided">
+    
+      <li class="post">
+        <a href="/blog/2014/07/22/mocking-javascript-a-little/">Mocking JavaScript a little</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section id="github-repos" class="aside-module grid__item one-whole lap-one-half">
+  <h1 class="title delta">
+    GitHub Repos
+    
+    <small class="pull-right">
+      <a class="btn" href="//github.com/jan-molak" title="@jan-molak on GitHub" target="_blank">
+        <i class="icon-external-link"></i>
+      </a>
+    </small>
+    
+  </h1>
+  <ul id="gh_repos" class="divided">
+    <li class="loading">
+      <i class="icon-spinner icon-spin"></i>
+    </li>
+  </ul>
+</section>
+
+
+
+
+</div>
+
+        </aside>
+        
+      </div>
+    </div>
+
+    <footer>
+      <div class="grid-wrapper">
+  <div class="grid">
+    <div class="grid__item">
+      <p class="copyright">
+  Copyright &copy; 2011-2014 Jan Molak, smartcode ltd. All rights reserved.
+</p>
+    </div>
+  </div>
+</div>
+
+    </footer>
+
+    <!--[if lt IE 7]>
+      <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+    <![endif]-->
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+<script src="//crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/md5.js"></script>
+<script defer src="/javascripts/octopress.js"></script>
+
+
+<script>
+  var _gaq=[['_setAccount','UA-24594055-3'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+
+
+<script>
+  var disqus_shortname = 'smartcodeltd';
+  
+    
+    // var disqus_developer = 1;
+    var disqus_identifier = 'http://smartcodeltd.github.io/blog/2014/07/22/mocking-javascript-a-little/';
+    var disqus_url = 'http://smartcodeltd.github.io/blog/2014/07/22/mocking-javascript-a-little/';
+    var disqus_script = 'embed.js';
+  
+  (function () {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  }());
+</script>
+
+<script defer>
+    'use strict';
+    
+    $(document).ready(function(){
+        var current = window.location.href.split('/').slice(4, 8).join('-'),
+            $link   = $('#pull-request-link');
+
+        $link.attr('href', 'https://github.com/smartcodeltd/smartcodeltd.github.io/edit/source/source/_posts/' + current + '.markdown')
+    });
+</script>
+
+
+
+<script>
+  $(document).ready(function(){
+    if (!window.jXHR){
+      var jxhr = document.createElement('script');
+      jxhr.type = 'text/javascript';
+      jxhr.src = '/javascripts/libs/jXHR.js';
+      var s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(jxhr, s);
+    }
+
+    github.showRepos({
+      user: 'jan-molak',
+      count: 2,
+      skip_forks: true,
+      target: '#gh_repos'
+    });
+  });
+</script>
+<script src="/javascripts/github.js"></script>
+
+
+
+
+
+
+  </body>
+</html>
