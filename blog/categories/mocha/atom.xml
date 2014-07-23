@@ -2,10 +2,17 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: mocha | smartcode ltd]]></title>
+<<<<<<< HEAD
   <link href="http://smartcodeltd.co.uk/blog/categories/mocha/atom.xml" rel="self"/>
   <link href="http://smartcodeltd.co.uk/"/>
   <updated>2014-07-23T18:32:33+01:00</updated>
   <id>http://smartcodeltd.co.uk/</id>
+=======
+  <link href="http://smartcodeltd.github.io/blog/categories/mocha/atom.xml" rel="self"/>
+  <link href="http://smartcodeltd.github.io/"/>
+  <updated>2014-07-22T23:43:34+01:00</updated>
+  <id>http://smartcodeltd.github.io/</id>
+>>>>>>> 2deb53e22fb6f559720a60e179881c781369f8cf
   <author>
     <name><![CDATA[Jan Molak]]></name>
     
@@ -14,10 +21,17 @@
 
   
   <entry>
+<<<<<<< HEAD
     <title type="html"><![CDATA[Mocking JavaScript a little - test doubles with sinon.js, mocha and chai]]></title>
     <link href="http://smartcodeltd.co.uk/blog/2014/07/22/mocking-javascript-a-little-test-doubles-with-sinonjs-mocha-and-chai/"/>
     <updated>2014-07-22T22:10:57+01:00</updated>
     <id>http://smartcodeltd.co.uk/blog/2014/07/22/mocking-javascript-a-little-test-doubles-with-sinonjs-mocha-and-chai</id>
+=======
+    <title type="html"><![CDATA[Mocking JavaScript a little]]></title>
+    <link href="http://smartcodeltd.github.io/blog/2014/07/22/mocking-javascript-a-little/"/>
+    <updated>2014-07-22T22:10:57+01:00</updated>
+    <id>http://smartcodeltd.github.io/blog/2014/07/22/mocking-javascript-a-little</id>
+>>>>>>> 2deb53e22fb6f559720a60e179881c781369f8cf
     <content type="html"><![CDATA[<p>How do you write a test in which you cannot (or chose not to) use real dependencies of whatever is that you&rsquo;re testing?
 What are your options in JavaScript? And what does a test doubles library give you that plain-old-js can&rsquo;t?
 Interested to find out? Read on!</p>

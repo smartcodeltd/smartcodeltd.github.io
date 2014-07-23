@@ -1,4 +1,8 @@
 User-agent: *
 Disallow: 
 
+<<<<<<< HEAD
 Sitemap: http://smartcodeltd.co.uk/sitemap.xml 
+=======
+Sitemap: http://smartcodeltd.github.io/sitemap.xml 
+>>>>>>> 2deb53e22fb6f559720a60e179881c781369f8cf
