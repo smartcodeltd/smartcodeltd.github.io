@@ -2,17 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[smartcode ltd]]></title>
-<<<<<<< HEAD
   <link href="http://smartcodeltd.co.uk/atom.xml" rel="self"/>
   <link href="http://smartcodeltd.co.uk/"/>
   <updated>2014-07-23T18:32:33+01:00</updated>
   <id>http://smartcodeltd.co.uk/</id>
-=======
-  <link href="http://smartcodeltd.github.io/atom.xml" rel="self"/>
-  <link href="http://smartcodeltd.github.io/"/>
-  <updated>2014-07-22T23:43:34+01:00</updated>
-  <id>http://smartcodeltd.github.io/</id>
->>>>>>> 2deb53e22fb6f559720a60e179881c781369f8cf
   <author>
     <name><![CDATA[Jan Molak]]></name>
     
@@ -21,17 +14,10 @@
 
   
   <entry>
-<<<<<<< HEAD
     <title type="html"><![CDATA[Mocking JavaScript a little - test doubles with sinon.js, mocha and chai]]></title>
     <link href="http://smartcodeltd.co.uk/blog/2014/07/22/mocking-javascript-a-little-test-doubles-with-sinonjs-mocha-and-chai/"/>
     <updated>2014-07-22T22:10:57+01:00</updated>
     <id>http://smartcodeltd.co.uk/blog/2014/07/22/mocking-javascript-a-little-test-doubles-with-sinonjs-mocha-and-chai</id>
-=======
-    <title type="html"><![CDATA[Mocking JavaScript a little]]></title>
-    <link href="http://smartcodeltd.github.io/blog/2014/07/22/mocking-javascript-a-little/"/>
-    <updated>2014-07-22T22:10:57+01:00</updated>
-    <id>http://smartcodeltd.github.io/blog/2014/07/22/mocking-javascript-a-little</id>
->>>>>>> 2deb53e22fb6f559720a60e179881c781369f8cf
     <content type="html"><![CDATA[<p>How do you write a test in which you cannot (or chose not to) use real dependencies of whatever is that you&rsquo;re testing?
 What are your options in JavaScript? And what does a test doubles library give you that plain-old-js can&rsquo;t?
 Interested to find out? Read on!</p>
@@ -671,11 +657,7 @@ because you got a new screwdriver and want to try it out ;&ndash;)</p>
 <li id="fn:1">
 <p><a href="http://blog.8thlight.com/uncle-bob/2014/05/14/TheLittleMocker.html">The Little Mocker</a> blog post by Uncle Bob Martin. As you might have already noticed, Uncle Bob&rsquo;s post has inspired this article greatly!<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
 <li id="fn:2">
-<<<<<<< HEAD
 <p>If you already <em>are</em> in this situation <a href="http://smartcodeltd.co.uk/contact">get in touch</a>, I can help you to get out of it :&ndash;) OK, no more cheeky marketing. Get back to the article, quick, quick:<a href="#fnref:2" rev="footnote">&#8617;</a></p></li>
-=======
-<p>If you already <em>are</em> in this situation <a href="http://smartcodeltd.github.io/contact">get in touch</a>, I can help you to get out of it :&ndash;) OK, no more cheeky marketing. Get back to the article, quick, quick:<a href="#fnref:2" rev="footnote">&#8617;</a></p></li>
->>>>>>> 2deb53e22fb6f559720a60e179881c781369f8cf
 <li id="fn:3">
 <p><a href="http://sinonjs.org/">Sinon.js</a> was written by Christian Johansen, author of <a href="http://www.amazon.co.uk/gp/product/0321683919/ref=as_li_ss_tl?ie=UTF8&amp;camp=1634&amp;creative=19450&amp;creativeASIN=0321683919&amp;linkCode=as2&amp;tag=smartcode-21">this excellent book</a><a href="#fnref:3" rev="footnote">&#8617;</a></p></li>
 <li id="fn:4">
