@@ -3,36 +3,36 @@
   
   
   <url>
-    <loc>http://smartcodeltd.co.uk/blog/2014/07/22/mocking-javascript-a-little-test-doubles-with-sinonjs-mocha-and-chai/</loc>
+    <loc>http://smartcodeltd.github.io/blog/2014/07/22/mocking-javascript-a-little-test-doubles-with-sinonjs-mocha-and-chai/</loc>
     <lastmod>2014-07-22T22:10:57+01:00</lastmod>
     <priority>0.8</priority>
   </url>
   
   
   <url>
-    <loc>http://smartcodeltd.co.uk/blog/</loc>
-    <lastmod>2014-07-23T18:32:33+01:00</lastmod>
+    <loc>http://smartcodeltd.github.io/blog/</loc>
+    <lastmod>2014-08-16T19:16:38+01:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>http://smartcodeltd.co.uk/</loc>
-    <lastmod>2014-07-23T18:32:33+01:00</lastmod>
+    <loc>http://smartcodeltd.github.io/</loc>
+    <lastmod>2014-08-16T19:16:38+01:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   
   <url>
-    <loc>http://smartcodeltd.co.uk/blog/archives/</loc>
-    <lastmod>2014-07-23T18:32:33+01:00</lastmod>
+    <loc>http://smartcodeltd.github.io/blog/archives/</loc>
+    <lastmod>2014-08-16T19:16:38+01:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>http://smartcodeltd.co.uk/contact/</loc>
-    <lastmod>2014-07-23T18:32:33+01:00</lastmod>
+    <loc>http://smartcodeltd.github.io/contact/</loc>
+    <lastmod>2014-08-16T19:16:38+01:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
