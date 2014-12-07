@@ -4,7 +4,7 @@
   <title><![CDATA[smartcode ltd]]></title>
   <link href="http://smartcodeltd.github.io/atom.xml" rel="self"/>
   <link href="http://smartcodeltd.github.io/"/>
-  <updated>2014-07-22T23:43:34+01:00</updated>
+  <updated>2014-10-20T23:18:47+01:00</updated>
   <id>http://smartcodeltd.github.io/</id>
   <author>
     <name><![CDATA[Jan Molak]]></name>
@@ -14,10 +14,105 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Mocking JavaScript a little]]></title>
-    <link href="http://smartcodeltd.github.io/blog/2014/07/22/mocking-javascript-a-little/"/>
+    <title type="html"><![CDATA[Communicating build status better with Jenkins and the Build Monitor plugin]]></title>
+    <link href="http://smartcodeltd.github.io/blog/2014/10/16/communicating-build-status-better-with-jenkins-and-the-build-monitor-plugin/"/>
+    <updated>2014-10-16T17:21:49+01:00</updated>
+    <id>http://smartcodeltd.github.io/blog/2014/10/16/communicating-build-status-better-with-jenkins-and-the-build-monitor-plugin</id>
+    <content type="html"><![CDATA[<p>If you&rsquo;re doing continuous integration chances are that you also care
+about your team understanding the current state of your project.
+Maybe you use a lava lamp or some other fancy device to visualise whether your
+builds are red or green.
+Or perhaps you&rsquo;ve got my little <a href="https://github.com/jan-molak/jenkins-build-monitor-plugin">Build Monitor plugin</a>
+installed on your Jenkins box and displayed on some shared screen for your team to see?</p>
+
+<p>Most visual extreme feedback devices use similar representation of the build status
+&ndash; the well-known <a href="http://en.wikipedia.org/wiki/Traffic_light_rating_system">RAG rating</a> used in a traffic light system.
+Now, what does this RAG rating mean and how will it be interpreted by your team?
+Yes, I know that you understand how the traffic lights work, but bear with me for just a moment
+and maybe this short article will help you to avoid the bad case of rotting builds.</p>
+
+<!-- more -->
+
+
+<p><strong>RAG</strong> stands for <strong>R</strong>ed, <strong>A</strong>mber and <strong>G</strong>reen.</p>
+
+<p><strong>Green</strong> is simple &ndash; it indicates that everything is OK:
+your tests have passed,
+deployment succeeded,
+an artifact has been correctly produced and it matches your quality criteria,
+this sort of thing. Basically it&rsquo;s safe for the traffic to proceed and for you to introduce new awesome features.</p>
+
+<p><strong>Red</strong> is also pretty straight-forward &ndash; one of the above is not the case. The traffic should stop.
+Perhaps your tests have failed? Or maybe your CI server couldn&rsquo;t promote the artifact
+for some reason? One way or another, red means that something didn&rsquo;t go according to plan
+and someone should look into it <em>immediately</em>.</p>
+
+<p><strong>Amber</strong> &ndash; now that&rsquo;s the one I have a problem with&hellip;</p>
+
+<h2>The bad case of rotting builds</h2>
+
+<p>In Jenkins, amber represents an <em>unstable</em> build.
+OK, but first, what does <em>unstable</em> mean according to the <a href="https://wiki.jenkins-ci.org/display/JENKINS/Terminology">Jenkins terminology</a>?</p>
+
+<blockquote><p>A build is unstable if it was built successfully and one or more publishers report it unstable. For example if the JUnit publisher is configured and a test fails then the build will be marked unstable.</p><footer><strong>Jenkins Terminology</strong> <cite>Table of Terms Used in Jenkins</cite></footer></blockquote>
+
+
+<p>And here&rsquo;s the trouble, you see? To me if a test has failed, it means that either the software I&nbsp;help building
+no longer behaves as expected or the test case no longer reflects what the desired behaviour is.
+Both scenarios should be reflected in a broken, red build, and a red build should result in me stopping whatever new features
+I was adding and fixing what&rsquo;s broken first.</p>
+
+<p>Another trouble with using amber to represent builds with failing tests is that
+humans are optimistic by nature<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup> &ndash; amber simply doesn&rsquo;t look as bad in the status report
+as red so you can get away with it for longer.</p>
+
+<p>I&rsquo;ve seen development teams ignoring <em>unstable</em> builds for weeks and even months because
+&ldquo;they were not <em>really</em> broken&rdquo;,
+&ldquo;only had <em>a few</em> flaky tests&rdquo;
+and
+&ldquo;[those failing tests] were not <em>that</em> important anyway&rdquo;.
+On several occasions I&rsquo;ve worked with teams that started with accepting a small percentage of their tests failing as &ldquo;normal and to be expected&rdquo;.
+Over time, however, this small percentage became 10%, then 15% then 50%, eventually ignoring test failures got them to a stage where those poor chaps
+started to question the point of automated testing altogether.</p>
+
+<p>If you&rsquo;re using Jenkins to run automated tests I strongly encourage you to consider the <a href="http://en.wikipedia.org/wiki/Broken_windows_theory">Broken Windows Theory</a>,
+fail the build when the tests fail and make sure you fix those failures as soon as you learn about them.</p>
+
+<p>OK, so why have I <a href="http://bit.ly/JBMBuild132">recently introduced</a> a visual representation of an <em>unstable</em> build to the <a href="https://github.com/jan-molak/jenkins-build-monitor-plugin">Build Monitor plugin</a>?
+I&rsquo;ve done it after a <a href="https://github.com/jan-molak/jenkins-build-monitor-plugin/issues/9">long conversation</a> with the Build Monitor plugin community because&hellip;</p>
+
+<h2>Not all Jenkins jobs are created equal</h2>
+
+<p>&hellip; and not all of them execute automated tests. Consider a Jenkins job gathering static code analysis metrics for example. Let&rsquo;s take test coverage for argument&rsquo;s sake.</p>
+
+<p>For some development teams this metric falling below say 80% is an important problem that needs to be addressed immediately (a red build).
+Other teams prefer to shoo before they shoot: use amber to indicate the metric falling below the required, ideal level
+(<em>the coverage has decreased, we should look into it when we have a moment</em>)
+and distinguish it from it falling below say 50% (<em>did someone ignore all the tests again?</em>)
+so that they can prioritise their work better.</p>
+
+<p>Remember however that even in the above scenario, if you leave your <em>unstable</em> builds all by themselves for too long,
+they will rot and cause you trouble when least expected<sup id="fnref:2"><a href="#fn:2" rel="footnote">2</a></sup>.</p>
+
+<p>Happy green builds!</p>
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>to all the pessimist out there &ndash; here&rsquo;s the research done by the University of Kansas and Gallup ;) &ndash; <a href="http://www.sciencedaily.com/releases/2009/05/090524122539.htm">People By Nature Are Universally Optimistic, Study Shows</a><a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+<li id="fn:2">
+<p>I&rsquo;m sure you know of the <a href="http://www.murphys-laws.com/murphy/murphy-true.html">Murphy&rsquo;s law</a><a href="#fnref:2" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Mocking JavaScript a little - test doubles with sinon.js, mocha and chai]]></title>
+    <link href="http://smartcodeltd.github.io/blog/2014/07/22/mocking-javascript-a-little-test-doubles-with-sinonjs-mocha-and-chai/"/>
     <updated>2014-07-22T22:10:57+01:00</updated>
-    <id>http://smartcodeltd.github.io/blog/2014/07/22/mocking-javascript-a-little</id>
+    <id>http://smartcodeltd.github.io/blog/2014/07/22/mocking-javascript-a-little-test-doubles-with-sinonjs-mocha-and-chai</id>
     <content type="html"><![CDATA[<p>How do you write a test in which you cannot (or chose not to) use real dependencies of whatever is that you&rsquo;re testing?
 What are your options in JavaScript? And what does a test doubles library give you that plain-old-js can&rsquo;t?
 Interested to find out? Read on!</p>

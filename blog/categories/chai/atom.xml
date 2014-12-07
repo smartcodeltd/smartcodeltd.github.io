@@ -4,7 +4,7 @@
   <title><![CDATA[Category: chai | smartcode ltd]]></title>
   <link href="http://smartcodeltd.github.io/blog/categories/chai/atom.xml" rel="self"/>
   <link href="http://smartcodeltd.github.io/"/>
-  <updated>2014-07-22T23:43:34+01:00</updated>
+  <updated>2014-10-20T23:18:47+01:00</updated>
   <id>http://smartcodeltd.github.io/</id>
   <author>
     <name><![CDATA[Jan Molak]]></name>
@@ -14,10 +14,10 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Mocking JavaScript a little]]></title>
-    <link href="http://smartcodeltd.github.io/blog/2014/07/22/mocking-javascript-a-little/"/>
+    <title type="html"><![CDATA[Mocking JavaScript a little - test doubles with sinon.js, mocha and chai]]></title>
+    <link href="http://smartcodeltd.github.io/blog/2014/07/22/mocking-javascript-a-little-test-doubles-with-sinonjs-mocha-and-chai/"/>
     <updated>2014-07-22T22:10:57+01:00</updated>
-    <id>http://smartcodeltd.github.io/blog/2014/07/22/mocking-javascript-a-little</id>
+    <id>http://smartcodeltd.github.io/blog/2014/07/22/mocking-javascript-a-little-test-doubles-with-sinonjs-mocha-and-chai</id>
     <content type="html"><![CDATA[<p>How do you write a test in which you cannot (or chose not to) use real dependencies of whatever is that you&rsquo;re testing?
 What are your options in JavaScript? And what does a test doubles library give you that plain-old-js can&rsquo;t?
 Interested to find out? Read on!</p>
