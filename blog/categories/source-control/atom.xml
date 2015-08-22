@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: source control | smartcode ltd]]></title>
+  <link href="http://smartcodeltd.github.io/blog/categories/source-control/atom.xml" rel="self"/>
+  <link href="http://smartcodeltd.github.io/"/>
+  <updated>2015-08-22T21:19:15+01:00</updated>
+  <id>http://smartcodeltd.github.io/</id>
+  <author>
+    <name><![CDATA[Jan Molak]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Branching and Continuous Delivery with Maven]]></title>
+    <link href="http://smartcodeltd.github.io/blog/2014/12/07/branching-and-continuous-delivery-with-maven/"/>
+    <updated>2014-12-07T16:54:13+00:00</updated>
+    <id>http://smartcodeltd.github.io/blog/2014/12/07/branching-and-continuous-delivery-with-maven</id>
+    <content type="html"><![CDATA[<p>One of the practices that helps to enable Continuous Delivery
+is for <strong>the whole team to develop on mainline</strong>.</p>
+
+<p>This can be a challenge if you work in a Java shop and use Maven:
+the popular Maven Release Plugin is more trouble than help in the context
+of Continuous Delivery and the very concept of Maven&rsquo;s SNAPSHOT and RELEASE builds
+is not well suited to it either.</p>
+
+<p>But can you make Maven play nice with Continuous Delivery pipelines?
+Can you publish build artifacts without the Release Plugin?
+Interested to find out? Read on!</p>
+
+<!-- more -->
+
+
+<h2>The goal</h2>
+
+<p>This article describes steps you can take to make Maven work in the context of a Continuous Delivery pipeline.
+The setup I describe enables the following:</p>
+
+<ol>
+<li>Whole team can develop on the mainline, benefiting from all the good things Continuous Integration can bring</li>
+<li>Every build can be identified by a unique build number and tracked to a commit that has triggered it</li>
+<li>It&rsquo;s trivial to understand what changes went into any given build, even when the build history is long gone from the CI server.</li>
+</ol>
+
+
+<h2>Whole team develops on mainline.</h2>
+
+<p>Maven is not part of the team and therefore should not be doing any development on mainline.
+Maven Release Plugin develops on mainline.</p>
+
+<p>But let&rsquo;s start from the beginning.</p>
+
+<p>Every developer has their own preferences regarding local branches, and I won&rsquo;t be talking about those in this article.
+When I talk about <em>mainline</em> I&rsquo;m referring to the shared repo where multiple developers integrate their daily work.</p>
+
+<p>Mainline in the git world is the <code>origin master</code> branch, in subversion it would be the <code>trunk</code>.
+Mainline is the place your Continuous Integration server should be most interested in as changes to mainline trigger
+the Continuous Delivery pipeline.</p>
+
+<p>This last statement is one of the main reasons why I prefer not to use Maven Release Plugin.</p>
+
+<h2>Every build is a potentially shippable product</h2>
+
+<p>.. and you should treat it as one</p>
+
+<ul>
+<li>have a release branch representing what&rsquo;s in the artifact</li>
+</ul>
+
+
+<h2>What&rsquo;s in the box? A.k.a. &ldquo;traceability&rdquo;.</h2>
+
+<p>git log release-1.2.3-10..release-1.2.3-12</p>
+]]></content>
+  </entry>
+  
+</feed>
